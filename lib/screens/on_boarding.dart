@@ -21,32 +21,58 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    pageController.jumpToPage(controller.items.length - 1);
+                  },
+                  child: const Text(
+                    "Skip",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
         bottomSheet: isLastPage
             ? const GetStartedBtn()
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SmoothPageIndicator(
-                    controller: pageController,
-                    count: controller.items.length,
-                    effect: WormEffect(
-                      dotHeight: context.screenHeight * 0.015,
-                      dotWidth: context.screenHeight * 0.015,
-                      activeDotColor: Colors.green,
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SmoothPageIndicator(
+                      controller: pageController,
+                      count: controller.items.length,
+                      effect: WormEffect(
+                        dotHeight: context.screenHeight * 0.015,
+                        dotWidth: context.screenHeight * 0.015,
+                        activeDotColor: const Color(0xff92E3A9),
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
-                    },
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(color: Colors.black),
+                    TextButton(
+                      onPressed: () {
+                        pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn);
+                      },
+                      child: const Text(
+                        "Next",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
         body: Container(
           margin: const EdgeInsets.symmetric(horizontal: 15),

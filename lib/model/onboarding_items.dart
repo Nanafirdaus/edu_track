@@ -1,4 +1,5 @@
 import 'ondoarding_info.dart';
+
 class OnboardingItems {
   List<OnboardingInfo> items = [
     OnboardingInfo(

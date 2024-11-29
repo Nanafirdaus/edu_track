@@ -39,6 +39,15 @@ class MyApp extends StatelessWidget {
       home: OnboardingPref.isFirstTime()!
           ? const OnBoardingScreen()
           : const UserDataScreen(),
+        theme: ThemeData(
+          bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            modalBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            elevation: 0,
+            modalElevation: 0,
+            
+        ),
+        ),
     );
   }
 }

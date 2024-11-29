@@ -23,7 +23,7 @@ class _GetStartedBtnState extends State<GetStartedBtn> {
               5,
             ),
           ),
-          color: Colors.green,
+          color: Color(0xff92E3A9),
         ),
         child: TextButton(
           onPressed: () {
