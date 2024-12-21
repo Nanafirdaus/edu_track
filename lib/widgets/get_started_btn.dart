@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/screens/user_data.dart';
 import 'package:studybuddy/utils/extension.dart';
-import 'package:studybuddy/utils/onboarding_pref.dart';
 
 class GetStartedBtn extends StatefulWidget {
   const GetStartedBtn({super.key});
@@ -23,12 +22,11 @@ class _GetStartedBtnState extends State<GetStartedBtn> {
               5,
             ),
           ),
-          color: Color(0xff92E3A9),
+          color: Color(0xff497255),
         ),
         child: TextButton(
           onPressed: () {
-            OnboardingPref.passOnboardingScreen();
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const UserDataScreen(),

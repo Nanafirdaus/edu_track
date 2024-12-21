@@ -13,8 +13,7 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   PageController pageController = PageController();
-  final controller = OnboardingItems();
-
+  final onboardingItems = OnboardingItems();
   bool isLastPage = false;
 
   @override
@@ -23,11 +22,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            Row(
+           isLastPage ? const SizedBox() : Row(
               children: [
                 TextButton(
                   onPressed: () {
-                    pageController.jumpToPage(controller.items.length - 1);
+                    pageController.jumpToPage(onboardingItems.items.length - 1);
                   },
                   child: const Text(
                     "Skip",
@@ -50,7 +49,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   children: [
                     SmoothPageIndicator(
                       controller: pageController,
-                      count: controller.items.length,
+                      count: onboardingItems.items.length,
                       effect: WormEffect(
                         dotHeight: context.screenHeight * 0.015,
                         dotWidth: context.screenHeight * 0.015,
@@ -78,20 +77,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 15),
           child: PageView.builder(
             onPageChanged: (value) => setState(() {
-              isLastPage = controller.items.length - 1 == value;
+              isLastPage = onboardingItems.items.length - 1 == value;
             }),
-            itemCount: controller.items.length,
+            itemCount: onboardingItems.items.length,
             controller: pageController,
             itemBuilder: (context, value) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(controller.items[value].image),
+                  Image.asset(onboardingItems.items[value].image),
                   SizedBox(
                     height: context.screenHeight * 0.05,
                   ),
                   Text(
-                    controller.items[value].title,
+                    onboardingItems.items[value].title,
                     style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -103,7 +102,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                      controller.items[value].description,
+                      onboardingItems.items[value].description,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.grey,

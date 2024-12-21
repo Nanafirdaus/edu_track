@@ -18,21 +18,24 @@ class AssignmentScheduleAdapter extends TypeAdapter<AssignmentSchedule> {
     };
     return AssignmentSchedule(
       isCompleted: fields[0] as bool,
-      assignmentId: fields[1] as String,
+      courseId: fields[1] as String,
       assignmentDateTime: fields[2] as DateTime,
+      description: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, AssignmentSchedule obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.isCompleted)
       ..writeByte(1)
-      ..write(obj.assignmentId)
+      ..write(obj.courseId)
       ..writeByte(2)
-      ..write(obj.assignmentDateTime);
+      ..write(obj.assignmentDateTime)
+      ..writeByte(3)
+      ..write(obj.description);
   }
 
   @override

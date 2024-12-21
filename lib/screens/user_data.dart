@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:studybuddy/screens/user_data2.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
+import 'package:studybuddy/screens/courses_screen.dart';
+import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/extension.dart';
-import 'package:studybuddy/widgets/custom_textfield.dart';
+import 'package:studybuddy/widgets/custom_textfield1.dart';
 
 class UserDataScreen extends StatefulWidget {
   const UserDataScreen({super.key});
@@ -11,22 +14,18 @@ class UserDataScreen extends StatefulWidget {
 }
 
 class _UserDataScreenState extends State<UserDataScreen> {
-  final levels = ["Level 1", "Level 2", "Level 3", "Level 4", "Level 5"];
-  late String selectedItem;
+  final levels = [1, 2, 3, 4, 5];
+  int? selectedLevel;
   TextEditingController nameController = TextEditingController();
   TextEditingController deptController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() => selectedItem = levels[0]);
-  }
+  HiveDB hiveDB = HiveDB(userBox: Hive.box(HiveBoxes.userBox));
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
               width: context.screenWidth,
@@ -47,10 +46,14 @@ class _UserDataScreenState extends State<UserDataScreen> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextFieldWidget(
+                    formFieldValidator: (value) {
+                      value.toString().isEmpty
+                          ? "Please enter your name"
+                          : null;
+                      return null;
+                    },
                     textEditingController: nameController,
                     prefixIcon: const Icon(
                       Icons.person,
@@ -63,6 +66,12 @@ class _UserDataScreenState extends State<UserDataScreen> {
                     height: 30,
                   ),
                   TextFieldWidget(
+                    formFieldValidator: (value) {
+                      value.toString().isEmpty
+                          ? "Please enter your department"
+                          : null;
+                      return null;
+                    },
                     textEditingController: deptController,
                     prefixIcon: const Icon(
                       Icons.place_rounded,
@@ -76,44 +85,59 @@ class _UserDataScreenState extends State<UserDataScreen> {
                   ),
                   SizedBox(
                     width: context.screenWidth,
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        value: selectedItem,
-                        items: levels.map((String item) {
-                          return DropdownMenuItem(
-                            value: item,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(item),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedItem = value!;
-                          });
-                        },
-                        icon: const Icon(Icons.arrow_drop_down),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                15,
-                              ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(
+                              15,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xff92E3A9),
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                15,
+                          border: Border.all()),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          isExpanded: true,
+                          hint: const Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
                               ),
-                            ),
+                              Icon(
+                                Icons.school,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Text("Select level"),
+                            ],
                           ),
+                          value: selectedLevel,
+                          items: levels.map((int item) {
+                            return DropdownMenuItem(
+                              value: item,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.school,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    Text("Level $item"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (item) {
+                            setState(() {
+                              selectedLevel = item!;
+                            });
+                          },
+                          icon: const Icon(Icons.arrow_drop_down),
                         ),
                       ),
                     ),
@@ -121,34 +145,52 @@ class _UserDataScreenState extends State<UserDataScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  SizedBox(
-                    width: context.screenWidth,
-                    height: 45,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const UserDataScreen2(),
+                  ListenableBuilder(
+                      listenable: Listenable.merge(
+                        [
+                          nameController,
+                          deptController,
+                        ],
+                      ),
+                      builder: (context, _) {
+                        bool? isEnabled = nameController.text.isNotEmpty &&
+                            deptController.text.isNotEmpty &&
+                            selectedLevel != null;
+                        return SizedBox(
+                          width: context.screenWidth,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (isEnabled) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return CoursesScreen(
+                                    name: nameController.text.trim(),
+                                    dept: deptController.text.trim(),
+                                    level: selectedLevel!,
+                                  );
+                                }));
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              backgroundColor: isEnabled
+                                  ? const Color(0xff497255)
+                                  : Colors.grey,
+                            ),
+                            child: const Text(
+                              "Continue",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        backgroundColor:const Color(0xff92E3A9),
-                      ),
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+                      }),
                 ],
               ),
             ),

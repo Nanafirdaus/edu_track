@@ -7,14 +7,18 @@ class AssignmentSchedule {
   final bool isCompleted;
 
   @HiveField(1)
-  final String assignmentId;
+  final String courseId;
 
   @HiveField(2)
   final DateTime assignmentDateTime;
 
+  @HiveField(3)
+  final String description;
+
   AssignmentSchedule({
     required this.isCompleted,
-    required this.assignmentId,
+    required this.courseId,
     required this.assignmentDateTime,
+    required this.description,
   });
 }
