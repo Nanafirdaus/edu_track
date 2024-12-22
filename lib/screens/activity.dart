@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/assignment_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
+import 'package:studybuddy/screens/time_table.dart';
+import 'package:studybuddy/utils/date_time_utils.dart';
+import 'package:studybuddy/utils/extension.dart';
 import 'package:studybuddy/utils/text_style.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -72,14 +77,61 @@ class _ActivityScreenState extends State<ActivityScreen>
                               style: kTextStyle(16),
                             ),
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          height: context.screenHeight * .05,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TimeTableScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Create TimeTable",
+                            style: kTextStyle(15),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  const Center(child: Text('Favorites Screen')),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ...context.watch<AssignmentProvider>().assignments.map(
+                              (assignment) => ListTile(
+                                title: Text(
+                                  assignment.description,
+                                  style: kTextStyle(20, isBold: true),
+                                ),
+                                subtitle: Text(
+                                  user
+                                          .userCourses[
+                                              int.parse(assignment.courseId)]
+                                          .courseTitle +
+                                      " - " +
+                                      assignment
+                                          .assignmentDateTime.formatDateTime +
+                                      " " +
+                                      assignment.assignmentDateTime
+                                          .format(DateFormat.HOUR_MINUTE),
+                                ),
+                              ),
+                            )
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 TextStyle kTextStyle(
   double size, {
   bool isBold = false,
-  Color color = Colors.black,
+  Color? color,
 }) {
   return TextStyle(
     fontSize: size,

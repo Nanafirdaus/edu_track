@@ -15,7 +15,10 @@ class AssignmentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addAssignment() {
-    
+  void addAssignment(AssignmentSchedule assignment) async {
+    await assignmentDB!.addAssignment(
+        assignment.assignmentId, assignment);
+    assignments = assignmentDB!.assignmentBox.values.toList();
+    notifyListeners();
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/assignment_provider.dart';
+import 'package:studybuddy/provider/segmented_btn_provider.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/date_time_utils.dart';
 import 'package:studybuddy/utils/text_style.dart';
@@ -60,7 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                     ),
                     const CustomSegmentedButton(),
-                    
+                    // Expanded(
+                    //   child: SingleChildScrollView(
+                    //     child: Column(
+                    //       children: [
+                    //         // context.watch<SegmentedButtonController>().classIsSelected ? null : context.watch<AssignmentProvider>().assignments.where((assignment) => assignment.assignment)
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

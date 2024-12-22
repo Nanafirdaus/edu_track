@@ -8,7 +8,7 @@ part of 'assignment_schedule.dart';
 
 class AssignmentScheduleAdapter extends TypeAdapter<AssignmentSchedule> {
   @override
-  final int typeId = 4;
+  final int typeId = 5;
 
   @override
   AssignmentSchedule read(BinaryReader reader) {
@@ -21,13 +21,14 @@ class AssignmentScheduleAdapter extends TypeAdapter<AssignmentSchedule> {
       courseId: fields[1] as String,
       assignmentDateTime: fields[2] as DateTime,
       description: fields[3] as String,
+      assignmentId: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, AssignmentSchedule obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.isCompleted)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class AssignmentScheduleAdapter extends TypeAdapter<AssignmentSchedule> {
       ..writeByte(2)
       ..write(obj.assignmentDateTime)
       ..writeByte(3)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(4)
+      ..write(obj.assignmentId);
   }
 
   @override

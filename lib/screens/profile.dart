@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           builder: (context, hiveBox, _) {
             User? user = hiveBox.get('userKey');
             return Padding(
-              padding: const EdgeInsets.all(30.0),
+              padding: const EdgeInsets.all(50.0),
               child: Center(
                 child: Column(
                   children: [
@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       radius: 80,
                       child: Icon(
                         Icons.person,
-                        size: 30,
+                        size: 80,
                       ),
                     ),
                     const SizedBox(

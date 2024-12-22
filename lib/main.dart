@@ -7,6 +7,7 @@ import 'package:studybuddy/model/course.dart';
 import 'package:studybuddy/model/course_schedule.dart';
 import 'package:studybuddy/model/lecturer.dart';
 import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/assignment_provider.dart';
 import 'package:studybuddy/provider/segmented_btn_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/screens/home.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => UserDataProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => AssignmentProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
