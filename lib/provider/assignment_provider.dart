@@ -12,7 +12,7 @@ class AssignmentProvider extends ChangeNotifier {
     assignmentDB =
         AssignmentDB(assignmentBox: Hive.box(HiveBoxes.assignmentScheduleBox));
     assignments = assignmentDB!.assignmentBox.values.toList();
-    notifyListeners();
+    notifyListenerds();
   }
 
   void addAssignment(AssignmentSchedule assignment) async {
