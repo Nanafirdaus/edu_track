@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
-import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/date_time_utils.dart';
 import 'package:studybuddy/utils/days_enum.dart';

@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:studybuddy/model/course.dart';
 import 'package:studybuddy/model/datetime_from_to.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/timetabledata.dart';
