@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studybuddy/model/user.dart';
 
-class HiveDB {
+class UserDataDB {
   Box<User> userBox;
   static String userKey = "userKey";
 
-  HiveDB({required this.userBox});
+  UserDataDB({required this.userBox});
 
   //! usef
   Future<void> saveUserData(User user) async {

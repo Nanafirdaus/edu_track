@@ -16,4 +16,8 @@ class AssignmentDB {
     await assignmentBox.delete(id);
   }
 
+  Future<void> updateAsignment(
+      String key, AssignmentSchedule assignment) async {
+    await assignmentBox.put(key, assignment);
+  }
 }

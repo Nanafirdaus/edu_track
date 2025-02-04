@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:studybuddy/utils/extension.dart';
+import 'package:studybuddy/utils/text_style.dart';
 
 class TaskCard extends StatelessWidget {
   final String title, description;
@@ -12,8 +14,8 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      width: 180,
+      height: context.screenHeight * .2,
+      width: context.screenWidth * .4,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -23,21 +25,19 @@ class TaskCard extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              description,
-              style: TextStyle(color: Colors.grey[700]),
+              style: kTextStyle(20, isBold: true),
             ),
             body,
+            Text(
+              description,
+              style: kTextStyle(16),
+            ),
           ],
         ),
       ),

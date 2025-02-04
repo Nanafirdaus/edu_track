@@ -1,38 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'lecturer.dart';
+part of 'datetime_from_to.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class LecturerAdapter extends TypeAdapter<Lecturer> {
+class DatetimeFromToAdapter extends TypeAdapter<DatetimeFromTo> {
   @override
-  final int typeId = 1;
+  final int typeId = 7;
 
   @override
-  Lecturer read(BinaryReader reader) {
+  DatetimeFromTo read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Lecturer(
-      lecturerId: fields[0] as String,
-      lecturerContact: fields[2] as int,
-      lecturerName: fields[1] as String,
+    return DatetimeFromTo(
+      from: fields[0] as DateTime?,
+      to: fields[1] as DateTime?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Lecturer obj) {
+  void write(BinaryWriter writer, DatetimeFromTo obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.lecturerId)
-      ..writeByte(1)
-      ..write(obj.lecturerName)
       ..writeByte(2)
-      ..write(obj.lecturerContact);
+      ..writeByte(0)
+      ..write(obj.from)
+      ..writeByte(1)
+      ..write(obj.to);
   }
 
   @override
@@ -41,7 +38,7 @@ class LecturerAdapter extends TypeAdapter<Lecturer> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LecturerAdapter &&
+      other is DatetimeFromToAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

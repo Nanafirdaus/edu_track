@@ -23,21 +23,23 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[currentIndex],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddTaskScreen(),
-            ),
-          );
-        },
-        elevation: 2,
-        child: const Icon(
-          Icons.add,
-          size: 30,
-        ),
-      ),
+      floatingActionButton: currentIndex == 1
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddTaskScreen(),
+                  ),
+                );
+              },
+              elevation: 2,
+              child: const Icon(
+                Icons.add,
+                size: 30,
+              ),
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,

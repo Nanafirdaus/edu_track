@@ -4,5 +4,5 @@ abstract class HiveBoxes {
   static const String lecturerBox = 'lecturerBox';
   static const String courseScheduleBox = 'courseScheduleBox';
   static const String assignmentScheduleBox = 'assignmentScheduleBox';
-
+  static const String timetableBox = 'timetableBox';
 }

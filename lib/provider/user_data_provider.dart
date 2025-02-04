@@ -6,17 +6,17 @@ import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/services/hive_db.dart';
 
 class UserDataProvider extends ChangeNotifier {
-  HiveDB? _hiveDB;
+  UserDataDB? _userDataDB;
   User? user;
 
   UserDataProvider() {
-    _hiveDB = HiveDB(userBox: Hive.box(HiveBoxes.userBox));
-    user = _hiveDB!.readUserData();
+    _userDataDB = UserDataDB(userBox: Hive.box(HiveBoxes.userBox));
+    user = _userDataDB!.readUserData();
     notifyListeners();
   }
 
   void refreshUser() {
-    _hiveDB!.saveUserData(user!);
+    _userDataDB!.saveUserData(user!);
     notifyListeners();
   }
 
@@ -24,5 +24,4 @@ class UserDataProvider extends ChangeNotifier {
     user!.userCourses.add(course);
     refreshUser();
   }
-
 }

@@ -16,9 +16,18 @@ class AssignmentProvider extends ChangeNotifier {
   }
 
   void addAssignment(AssignmentSchedule assignment) async {
-    await assignmentDB!.addAssignment(
-        assignment.assignmentId, assignment);
+    await assignmentDB!.addAssignment(assignment.assignmentId, assignment);
     assignments = assignmentDB!.assignmentBox.values.toList();
+    notifyListeners();
+  }
+
+  void toggleCompletedStatus(String id, bool val) async {
+    AssignmentSchedule assignment =
+        assignments.firstWhere((assignment) => assignment.assignmentId == id);
+    final newAssignment =
+        assignment.copyWith(isCompleted: val);
+    await assignmentDB!.updateAsignment(id, newAssignment);
+      assignments = assignmentDB!.assignmentBox.values.toList();
     notifyListeners();
   }
 }

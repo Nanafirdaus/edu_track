@@ -28,7 +28,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController codeController = TextEditingController();
   List<Course> courses = [];
-  HiveDB hiveDB = HiveDB(userBox: Hive.box(HiveBoxes.userBox));
+  UserDataDB hiveDB = UserDataDB(userBox: Hive.box(HiveBoxes.userBox));
   late bool courseIsEmpty;
 
   @override

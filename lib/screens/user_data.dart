@@ -18,7 +18,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
   int? selectedLevel;
   TextEditingController nameController = TextEditingController();
   TextEditingController deptController = TextEditingController();
-  HiveDB hiveDB = HiveDB(userBox: Hive.box(HiveBoxes.userBox));
+  UserDataDB hiveDB = UserDataDB(userBox: Hive.box(HiveBoxes.userBox));
 
   @override
   Widget build(BuildContext context) {

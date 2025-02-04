@@ -25,4 +25,18 @@ class AssignmentSchedule {
     required this.description,
     required this.assignmentId,
   });
+
+  AssignmentSchedule copyWith({
+    String? description,
+    DateTime? dateTime,
+    bool? isCompleted,
+  }) {
+    return AssignmentSchedule(
+      isCompleted: isCompleted ?? this.isCompleted,
+      courseId: courseId,
+      assignmentDateTime: assignmentDateTime ?? dateTime!,
+      description: description ?? this.description,
+      assignmentId: assignmentId,
+    );
+  }
 }
