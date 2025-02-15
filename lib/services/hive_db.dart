@@ -1,27 +1,36 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studybuddy/model/user.dart';
 
 class UserDataDB {
-  Box<User> userBox;
+  static UserDataDB? _instance;
   static String userKey = "userKey";
+  Box<User>? userBox;
 
-  UserDataDB({required this.userBox});
+  UserDataDB._({required this.userBox});
+
+  factory UserDataDB({Box<User>? userBox}) {
+    _instance ??= UserDataDB._(userBox: userBox);
+    return _instance!;
+  }
 
   //! usef
   Future<void> saveUserData(User user) async {
-    await userBox.put(userKey, user);
+    await userBox!.put(userKey, user);
+    log("success");
   }
 
   User? readUserData() {
-    return userBox.get(userKey);
+    return userBox!.get(userKey);
   }
 
   Future clearUserData() async {
-    await userBox.delete(userKey);
+    await userBox!.delete(userKey);
   }
 
   ValueListenable<Box<User>> listenable() {
-    return userBox.listenable();
+    return userBox!.listenable();
   }
 }

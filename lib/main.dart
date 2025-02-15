@@ -34,6 +34,7 @@ Future<void> main() async {
   await Hive.openBox<Course>(HiveBoxes.courseBox);
   await Hive.openBox<CourseSchedule>(HiveBoxes.courseScheduleBox);
   await Hive.openBox<AssignmentSchedule>(HiveBoxes.assignmentScheduleBox);
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
   );
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => TimeTableProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TempTimeTableProvider(),
         )
       ],
       child: MaterialApp(

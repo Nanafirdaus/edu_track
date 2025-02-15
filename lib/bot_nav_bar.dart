@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:studybuddy/screens/activity.dart';
 import 'package:studybuddy/screens/add_tasks.dart';
 import 'package:studybuddy/screens/home.dart';
@@ -22,7 +23,10 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: screens,
+      ),
       floatingActionButton: currentIndex == 1
           ? FloatingActionButton(
               onPressed: () {
@@ -35,33 +39,37 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
               },
               elevation: 2,
               child: const Icon(
-                Icons.add,
+                Iconsax.add_copy,
                 size: 30,
               ),
             )
           : null,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        onTap: (newIndex) {
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: currentIndex,
+        onDestinationSelected: (newIndex) {
           setState(() {
             currentIndex = newIndex;
           });
         },
-        items: const [
-          BottomNavigationBarItem(
-            backgroundColor: Colors.grey,
+        destinations: [
+          NavigationDestination(
             icon: Icon(
-              Icons.home_filled,
+              currentIndex == 0 ? Iconsax.home : Iconsax.home_copy,
             ),
             label: "Home",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.task),
+          NavigationDestination(
+            icon: Icon(
+              currentIndex == 1 ? Iconsax.activity : Iconsax.activity_copy,
+            ),
             label: "Activity",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+          NavigationDestination(
+            icon: Icon(
+              currentIndex == 2
+                  ? Iconsax.profile_circle
+                  : Iconsax.profile_circle_copy,
+            ),
             label: "Profile",
           ),
         ],

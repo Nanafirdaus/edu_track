@@ -12,4 +12,10 @@ extension DateTimeUtils on DateTime {
     final format = intl.date(dateFormt);
     return format.format(this);
   }
+
+  bool isSameDayAs(DateTime dateTime) {
+    return dateTime.day == day &&
+        dateTime.month == month &&
+        dateTime.year == year;
+  }
 }

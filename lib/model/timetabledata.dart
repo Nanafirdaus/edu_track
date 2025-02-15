@@ -45,4 +45,16 @@ class TimeTableData {
       venue: venue ?? this.venue,
     );
   }
+
+  @override
+  String toString() {
+    return '''TimeTableData(
+      id: $id, 
+      course: $course, 
+      dateTimeFromTo: ${dateTimeFromTo.map((dt) => dt.toString()).toList()}, 
+      days: ${days.map((day) => day.name).toList()}, 
+      lecturerName: $lecturerName, 
+      venue: $venue
+    )''';
+  }
 }

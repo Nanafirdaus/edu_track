@@ -1,11 +1,12 @@
 import 'package:hive/hive.dart';
 
-part 'datetime_from_to.g.dart';
+part '../provider/datetime_from_to.g.dart';
 
 @HiveType(typeId: 7)
 class DatetimeFromTo {
   @HiveField(0)
   final DateTime? from;
+
   @HiveField(1)
   final DateTime? to;
 
@@ -17,4 +18,11 @@ class DatetimeFromTo {
       to: to ?? this.to,
     );
   }
+
+  @override
+  String toString() {
+    return 'DatetimeFromTo(from: ${from?.toIso8601String()}, to: ${to?.toIso8601String()})';
+  }
+
+  bool isNull() => from == null || to == null;
 }

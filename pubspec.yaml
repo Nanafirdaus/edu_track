@@ -19,16 +19,17 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.3
+  flutter_local_notifications: ^18.0.1
+  flutter_native_splash: ^2.4.4
   hive: ^2.2.3
   hive_flutter: null
+  iconsax_flutter: ^1.0.0
   intl: ^0.20.1
   provider: ^6.1.2
   shared_preferences: ^2.3.3
   smooth_page_indicator: ^1.2.0+3
   uuid: ^4.5.1
-  flutter_launcher_icons: "^0.14.3"
-  flutter_native_splash: ^2.4.4
-  flutter_local_notifications: ^18.0.1
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -49,11 +50,11 @@ dev_dependencies:
   hive_generator: null
 
 flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/home1.png
+  android_12:
+    image: assets/images/home1.png
     color: "#ffffff"
-    image: assets/images/splash.gif
-    android_12:
-      image: assets/images/splash.gif
-      color: "#ffffff"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

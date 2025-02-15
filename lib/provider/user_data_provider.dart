@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studybuddy/model/course.dart';
@@ -6,22 +8,44 @@ import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/services/hive_db.dart';
 
 class UserDataProvider extends ChangeNotifier {
-  UserDataDB? _userDataDB;
+  final UserDataDB _userDataDB =
+      UserDataDB(userBox: Hive.box(HiveBoxes.userBox));
   User? user;
 
   UserDataProvider() {
-    _userDataDB = UserDataDB(userBox: Hive.box(HiveBoxes.userBox));
-    user = _userDataDB!.readUserData();
+    user = _userDataDB.readUserData();
+  }
+
+  void refreshUser() async {
+    await _userDataDB.saveUserData(user!);
+    user = _userDataDB.readUserData();
     notifyListeners();
   }
 
-  void refreshUser() {
-    _userDataDB!.saveUserData(user!);
+  void updateCourses(List<Course> courses) {
+    user = user!.copyWith(
+        userCourses: courses);
+    saveUser(user!);
+  }
+
+  void saveUser(User user) async {
+    await _userDataDB.saveUserData(user);
     notifyListeners();
   }
 
-  void updateCourses(Course course) {
-    user!.userCourses.add(course);
-    refreshUser();
+  void updateDept(String dept) {
+    user = user!.copyWith(userDepartment: dept);
+    saveUser(user!);
+  }
+
+  void updateLevel(int level) {
+    user = user!.copyWith(userLevel: level);
+    saveUser(user!);
+  }
+
+  void updateName(String name) {
+    user = user!.copyWith(userName: name);
+    log(user!.userName + " after .copyWith()");
+    saveUser(user!);
   }
 }

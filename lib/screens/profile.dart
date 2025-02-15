@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/user.dart';
@@ -27,7 +28,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: const Text("Profile"),
+        title: Text(
+          "Profile",
+          style: kTextStyle(25),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -39,7 +43,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
             icon: const Icon(
-              Icons.settings,
+              Iconsax.edit_2,
+              size: 30,
             ),
           ),
         ],
@@ -54,12 +59,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
-                      radius: 80,
-                      child: Icon(
-                        Icons.person,
-                        size: 80,
-                      ),
+                    Icon(
+                      Iconsax.profile_circle,
+                      size: 200,
+                      color: Color(0xff497255),
                     ),
                     const SizedBox(
                       height: 40,
@@ -91,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             assignmentProvider.assignments
                                 .where((assignment) =>
                                     assignment.assignmentDateTime
-                                        .isAfter(DateTime.now()) &&
+                                        .isBefore(DateTime.now()) &&
                                     !assignment.isCompleted)
                                 .length
                                 .toString(),

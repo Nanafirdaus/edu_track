@@ -22,4 +22,23 @@ class User {
     required this.userLevel,
     required this.userCourses,
   });
+
+  User copyWith({
+    String? userName,
+    String? userDepartment,
+    int? userLevel,
+    List<Course>? userCourses,
+  }) {
+    return User(
+      userName: userName ?? this.userName,
+      userDepartment: userDepartment ?? this.userDepartment,
+      userLevel: userLevel ?? this.userLevel,
+      userCourses: userCourses ?? this.userCourses,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'User(userName: $userName, userDepartment: $userDepartment, userLevel: $userLevel, userCourses: ${userCourses.map((course) => course.toString()).toList()})';
+  }
 }

@@ -24,9 +24,6 @@ class TextFieldWidget2 extends StatelessWidget {
         prefixIcon: prefixIcon,
         labelText: label,
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xff92E3A9),
-          ),
           borderRadius: BorderRadius.all(
             Radius.circular(
               15,

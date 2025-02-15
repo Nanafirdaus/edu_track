@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studybuddy/model/course.dart';
 import 'package:studybuddy/model/datetime_from_to.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
@@ -12,7 +13,8 @@ import 'package:studybuddy/widgets/date_time_widget.dart';
 import 'package:studybuddy/widgets/timetable_data_fields.dart';
 
 class TimetableCreationScreen extends StatefulWidget {
-  const TimetableCreationScreen({super.key});
+  List<Course>? courses;
+  TimetableCreationScreen({this.courses, super.key});
 
   @override
   State<TimetableCreationScreen> createState() =>
@@ -33,10 +35,18 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       textEditingCtrls = List.generate(
-          context.read<UserDataProvider>().user!.userCourses.length, (index) {
+          widget.courses != null
+              ? widget.courses!.length
+              : context.read<UserDataProvider>().user!.userCourses.length,
+          (index) {
         return [TextEditingController(), TextEditingController()];
       });
       log(textEditingCtrls!.length.toString());
+      if (widget.courses != null) {
+        context
+            .read<TempTimeTableProvider>()
+            .initializeProvider(widget.courses!);
+      }
       setState(() {
         isLoading = false;
       });
@@ -46,10 +56,16 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
   @override
   Widget build(BuildContext context) {
     UserDataProvider userDataProvider = Provider.of<UserDataProvider>(context);
-    TimeTableProvider timeTableProvider =
-        Provider.of<TimeTableProvider>(context);
+    final timeTableProvider = widget.courses == null
+        ? Provider.of<TimeTableProvider>(context)
+        : Provider.of<TempTimeTableProvider>(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: BackButton(onPressed: () {
+          context.read<TimeTableProvider>().invalidateProvider();
+          Navigator.pop(context);
+        }),
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -65,7 +81,9 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
                       builder: (context, val, _) {
                         return LinearProgressIndicator(
                           value: ((val + 1) /
-                              userDataProvider.user!.userCourses.length),
+                              (widget.courses == null
+                                  ? userDataProvider.user!.userCourses.length
+                                  : widget.courses!.length)),
                           backgroundColor: Colors.grey[400],
                         );
                       }),
@@ -73,10 +91,6 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
                 Expanded(
                   child: Column(
                     children: [
-                      // Text(
-                      //   "${currentIndex + 1}/${userDataProvider.user!.userCourses.length}",
-                      //   style: kTextStyle(18, isBold: true),
-                      // ),
                       const SizedBox(height: 10),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .90,
@@ -91,11 +105,12 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
                       const SizedBox(height: 40),
                       Text(
                         "Select days",
-                        style: kTextStyle(15, isBold: true),
+                        style: kTextStyle(20, isBold: true),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
                         child: PageView(
+                          physics: const NeverScrollableScrollPhysics(),
                           controller: pageController,
                           onPageChanged: (newIndex) {
                             setState(() {
@@ -311,26 +326,75 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
                 BottomButtons(
                   current: currentIndex,
                   onNextTapped: () {
-                    if (currentIndex + 1 ==
-                        userDataProvider.user!.userCourses.length) {
-                      timeTableProvider.createTimetable(context);
+                    log(textEditingCtrls![currentIndex]
+                                [0]
+                            .text
+                            .isEmpty
+                            .toString() +
+                        " " +
+                        textEditingCtrls![currentIndex][1]
+                            .text
+                            .isEmpty
+                            .toString() +
+                        " " +
+                        timeTableProvider.timetableDataList[currentIndex]
+                            .lecturerName.isEmpty
+                            .toString() +
+                        " " +
+                        timeTableProvider
+                            .timetableDataList[currentIndex].venue.isEmpty
+                            .toString());
+
+                    if (textEditingCtrls![currentIndex][0].text.isEmpty ||
+                        textEditingCtrls![currentIndex][1].text.isEmpty ||
+                        timeTableProvider
+                            .timetableDataList[currentIndex].dateTimeFromTo
+                            .where((item) => item.isNull())
+                            .isNotEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text("Fill the required fields"),
+                          duration: Duration(milliseconds: 800),
+                        ),
+                      );
                       return;
-                    }
-                    if (currentIndex <
-                        userDataProvider.user!.userCourses.length) {
-                      if (timeTableProvider.timetableDataList[currentIndex].days
-                              .isNotEmpty &&
-                          timeTableProvider.timetableDataList[currentIndex]
-                              .dateTimeFromTo.isNotEmpty) {
+                    } else {
+                      if (currentIndex + 1 ==
+                          (widget.courses != null
+                              ? widget.courses!.length
+                              : userDataProvider.user!.userCourses.length)) {
+                        timeTableProvider.updateTimetableData(
+                            currentIndex,
+                            timeTableProvider.timetableDataList[currentIndex]
+                                .copyWith(
+                                    lecturerName:
+                                        textEditingCtrls![currentIndex][0]
+                                            .text
+                                            .trim(),
+                                    venue: textEditingCtrls![currentIndex][1]
+                                        .text
+                                        .trim()));
+                        timeTableProvider.createTimetable(context);
+                        log(timeTableProvider.timetableDataList.toString());
+                        return;
+                      }
+                      if (currentIndex <
+                          (widget.courses != null
+                              ? widget.courses!.length
+                              : userDataProvider.user!.userCourses.length)) {
+                        timeTableProvider.updateTimetableData(
+                            currentIndex,
+                            timeTableProvider.timetableDataList[currentIndex]
+                                .copyWith(
+                                    lecturerName:
+                                        textEditingCtrls![currentIndex][0]
+                                            .text
+                                            .trim(),
+                                    venue: textEditingCtrls![currentIndex][1]
+                                        .text
+                                        .trim()));
                         pageController.jumpToPage(currentIndex + 1);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text("Fill the required fields"),
-                            duration: Duration(milliseconds: 800),
-                          ),
-                        );
                       }
                     }
                   },
@@ -341,7 +405,9 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
                   },
                   label1: "Previous",
                   label2: currentIndex + 1 <
-                          userDataProvider.user!.userCourses.length
+                          (widget.courses != null
+                              ? widget.courses!.length
+                              : userDataProvider.user!.userCourses.length)
                       ? "Next"
                       : "Create Timetable",
                 )

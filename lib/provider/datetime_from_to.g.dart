@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'datetime_from_to.dart';
+part of '../model/datetime_from_to.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

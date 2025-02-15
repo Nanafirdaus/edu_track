@@ -8,6 +8,7 @@ import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/date_time_utils.dart';
 import 'package:studybuddy/utils/days_enum.dart';
 import 'package:studybuddy/utils/text_style.dart';
+import 'package:studybuddy/widgets/empty_activity.dart';
 import 'package:studybuddy/widgets/segmented_butn.dart';
 import '../provider/assignment_provider.dart';
 import '../provider/segmented_btn_provider.dart';
@@ -75,50 +76,76 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 40,
                     ),
-                    const CustomSegmentedButton(),
-                    const SizedBox(height: 10),
                     Text(
                       "Today",
-                      style: kTextStyle(30, isBold: true),
+                      style: kTextStyle(40, isBold: true),
                     ),
+                    const SizedBox(height: 10),
+                    const CustomSegmentedButton(),
+                    const SizedBox(height: 10),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Card.outlined(
-                              elevation: 3,
-                              child: switch (context
-                                  .watch<SegmentedButtonController>()
-                                  .classIsSelected) {
-                                true => timeTableProvider.timeTableCreated!
-                                    ? Column(children: [
-                                        ...timeTableProvider.timetableDataList
-                                            .where((timetableData) =>
-                                                timetableData.days
-                                                    .containsToday())
-                                            .map(
-                                              (course) => ListTile(
-                                                title: Text(
-                                                    course.course.courseTitle),
+                          child: switch (context
+                              .watch<SegmentedButtonController>()
+                              .classIsSelected) {
+                            true => timeTableProvider.timeTableCreated!
+                                ? timeTableProvider.timetableDataList
+                                        .where((timetableData) =>
+                                            timetableData.days.containsToday())
+                                        .isEmpty
+                                    ? EmptyActivity(
+                                        text: "classes", today: true)
+                                    : Card.outlined(
+                                        elevation: 3,
+                                        child: Column(children: [
+                                          ...timeTableProvider.timetableDataList
+                                              .where((timetableData) =>
+                                                  timetableData.days
+                                                      .containsToday())
+                                              .map(
+                                                (course) => ListTile(
+                                                  title: Text(course
+                                                      .course.courseTitle),
+                                                ),
                                               ),
-                                            ),
-                                      ])
-                                    :const Center(child: Text('data')),
-                                _ => Column(
-                                    children: [
-                                      ...assignmentProvider.assignments
-                                          .where((assignment) => isToday(
-                                              assignment.assignmentDateTime))
-                                          .map(
-                                            (assignment) => ListTile(
-                                              title:
-                                                  Text(assignment.description),
-                                            ),
-                                          )
-                                          .toList()
-                                    ],
-                                  )
-                              }),
+                                        ]),
+                                      )
+                                : EmptyActivity(text: "classes"),
+                            _ => context
+                                    .watch<AssignmentProvider>()
+                                    .assignments
+                                    .isEmpty
+                                ? EmptyActivity(text: "assignments")
+                                : context
+                                        .watch<AssignmentProvider>()
+                                        .assignments
+                                        .where((task) => task.assignmentDateTime
+                                            .isSameDayAs(DateTime.now()))
+                                        .isEmpty
+                                    ? Text(
+                                        "No tasks today",
+                                        style: kTextStyle(25),
+                                      )
+                                    : Card.outlined(
+                                        elevation: 3,
+                                        child: Column(
+                                          children: [
+                                            ...assignmentProvider.assignments
+                                                .where((assignment) => isToday(
+                                                    assignment
+                                                        .assignmentDateTime))
+                                                .map(
+                                                  (assignment) => ListTile(
+                                                    title: Text(
+                                                        assignment.description),
+                                                  ),
+                                                )
+                                          ],
+                                        ),
+                                      )
+                          },
                         ),
                       ),
                     )
