@@ -54,6 +54,19 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
   }
 
   @override
+void dispose() {
+  pageController.dispose();
+  if (textEditingCtrls != null) {
+    for (var controllers in textEditingCtrls!) {
+      for (var ctrl in controllers) {
+        ctrl.dispose();
+      }
+    }
+  }
+  super.dispose();
+}
+
+  @override
   Widget build(BuildContext context) {
     UserDataProvider userDataProvider = Provider.of<UserDataProvider>(context);
     final timeTableProvider = widget.courses == null
