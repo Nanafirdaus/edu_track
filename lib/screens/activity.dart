@@ -6,7 +6,6 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/model/course.dart';
-import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/provider/assignment_provider.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
