@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:studybuddy/model/assignment_schedule.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/services/assignment.dart';
+import 'package:studybuddy/services/notifications_service.dart';
 
 class AssignmentProvider extends ChangeNotifier {
   AssignmentDB? assignmentDB;
@@ -18,6 +19,7 @@ class AssignmentProvider extends ChangeNotifier {
   void addAssignment(AssignmentSchedule assignment) async {
     await assignmentDB!.addAssignment(assignment.assignmentId, assignment);
     assignments = assignmentDB!.assignmentBox.values.toList();
+    await NotificationService.scheduleAssignmentNotification(assignment);
     notifyListeners();
   }
 

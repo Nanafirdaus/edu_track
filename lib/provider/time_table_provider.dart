@@ -6,6 +6,7 @@ import 'package:studybuddy/model/datetime_from_to.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/timetabledata.dart';
 import 'package:studybuddy/services/hive_db.dart';
+import 'package:studybuddy/services/notifications_service.dart';
 import 'package:studybuddy/services/timetable_db.dart';
 import 'package:studybuddy/utils/days_enum.dart';
 import 'package:uuid/uuid.dart';
@@ -49,6 +50,8 @@ class TempTimeTableProvider extends BaseTimetimeProvider {
     timetableDataList.add(data);
     notifyListeners();
   }
+
+  
 
   @override
   void updateTimetableData(int index, TimeTableData data) {
@@ -148,6 +151,22 @@ class TimeTableProvider extends BaseTimetimeProvider {
     timetableDataList.add(data);
     notifyListeners();
   }
+  
+  void moveCourseToNewDay(TimeTableData course, Day oldDay, Day newDay) async{
+    final courseIndex = timetableDataList.indexWhere((c) => c.id == course.id);
+    if (courseIndex != -1) {
+      final updatedCourse = timetableDataList[courseIndex];
+
+      // Remove from old day and add to new day
+      List<Day> updatedDays = List.from(updatedCourse.days);
+      updatedDays.remove(oldDay);
+      updatedDays.add(newDay);
+
+      timetableDataList[courseIndex] = updatedCourse.copyWith(days: updatedDays);
+      await _timetableDB!.updateTimeTableData(timetableDataList[courseIndex]);
+      notifyListeners();
+    }
+  }
 
   @override
   void updateTimetableData(int index, TimeTableData data) {
@@ -197,6 +216,7 @@ class TimeTableProvider extends BaseTimetimeProvider {
       );
       timetableDataList = _timetableDB!.timetableBox.values.toList();
       timeTableCreated = true;
+     await NotificationService.scheduleTimetableNotifications(timetableDataList);
       notifyListeners();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

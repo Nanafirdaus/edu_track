@@ -14,6 +14,7 @@ import 'package:studybuddy/provider/segmented_btn_provider.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/screens/on_boarding.dart';
+import 'package:studybuddy/services/notifications_service.dart';
 import 'package:studybuddy/services/onboarding_pref.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studybuddy/utils/days_enum.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await OnboardingPref.init();
   await Hive.initFlutter();
+  await NotificationService.init(); 
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(CourseAdapter());
   Hive.registerAdapter(CourseScheduleAdapter());
