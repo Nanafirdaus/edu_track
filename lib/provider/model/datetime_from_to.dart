@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part '../provider/datetime_from_to.g.dart';
+part '../datetime_from_to.g.dart';
 
 @HiveType(typeId: 7)
 class DatetimeFromTo {

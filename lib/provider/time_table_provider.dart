@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:studybuddy/model/course.dart';
-import 'package:studybuddy/model/datetime_from_to.dart';
-import 'package:studybuddy/model/hive_boxes.dart';
-import 'package:studybuddy/model/timetabledata.dart';
+import 'package:studybuddy/provider/model/course.dart';
+import 'package:studybuddy/provider/model/datetime_from_to.dart';
+import 'package:studybuddy/provider/model/hive_boxes.dart';
+import 'package:studybuddy/provider/model/timetabledata.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/services/notifications_service.dart';
 import 'package:studybuddy/services/timetable_db.dart';
@@ -24,8 +24,11 @@ abstract class BaseTimetimeProvider extends ChangeNotifier {
 }
 
 class TempTimeTableProvider extends BaseTimetimeProvider {
+  @override
   TimetableDB? _timetableDB;
+  @override
   UserDataDB? _userDataDB;
+  @override
   List<TimeTableData> timetableDataList = [];
 
   @override
@@ -103,9 +106,13 @@ class TempTimeTableProvider extends BaseTimetimeProvider {
 }
 
 class TimeTableProvider extends BaseTimetimeProvider {
+  @override
   TimetableDB? _timetableDB;
+  @override
   UserDataDB? _userDataDB;
+  @override
   bool? timeTableCreated;
+  @override
   List<TimeTableData> timetableDataList = [];
 
   TimeTableProvider() {
@@ -163,7 +170,7 @@ class TimeTableProvider extends BaseTimetimeProvider {
       updatedDays.add(newDay);
 
       timetableDataList[courseIndex] = updatedCourse.copyWith(days: updatedDays);
-      await _timetableDB!.updateTimeTableData(timetableDataList[courseIndex]);
+      await _timetableDB!.updateTimetableData(timetableDataList[courseIndex]);
       notifyListeners();
     }
   }
@@ -173,6 +180,12 @@ class TimeTableProvider extends BaseTimetimeProvider {
     timetableDataList[index] = data;
     notifyListeners();
   }
+
+  void deleteTimetableData(String timetableId) {
+  timetableDataList.removeWhere((data) => data.id == timetableId);
+  notifyListeners(); 
+}
+
 
   @override
   void updateDays(Day day, int index) {

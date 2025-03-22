@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/model/assignment_schedule.dart';
-import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/model/assignment_schedule.dart';
+import 'package:studybuddy/provider/model/user.dart';
 import 'package:studybuddy/provider/assignment_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/utils/extension.dart';
@@ -57,7 +57,7 @@ class _AddTaskScreenState extends State<AddTaskScreen>
                                     course.courseTitle,
                                     style: kTextStyle(16),
                                   ),
-                                  selected: user!.userCourses[selectedCourse]
+                                  selected: user.userCourses[selectedCourse]
                                           .courseTitle ==
                                       course.courseTitle,
                                   onSelected: (_) {

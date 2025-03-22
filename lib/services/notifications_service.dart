@@ -1,8 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:studybuddy/model/assignment_schedule.dart';
-import 'package:studybuddy/model/timetabledata.dart';
+import 'package:studybuddy/provider/model/assignment_schedule.dart';
+import 'package:studybuddy/provider/model/timetabledata.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
 
@@ -10,6 +9,7 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  /// Initialize notification service
   static Future<void> init() async {
     tz_data.initializeTimeZones();
     const AndroidInitializationSettings androidInitializationSettings =
@@ -21,6 +21,7 @@ class NotificationService {
     await _notificationsPlugin.initialize(initializationSettings);
   }
 
+  /// Schedule an assignment notification at the exact time
   static Future<void> scheduleAssignmentNotification(
       AssignmentSchedule assignment) async {
     final tz.TZDateTime scheduledTime =
@@ -40,12 +41,12 @@ class NotificationService {
           priority: Priority.high,
         ),
       ),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
     );
-    log('Scheduled notification for ${assignment.description}');
+
+    log('Scheduled notification for ${assignment.description} at $scheduledTime');
   }
 
+  /// Schedule a timetable notification at the exact class time
   static Future<void> scheduleTimetableNotifications(
       List<TimeTableData> timetableDataList) async {
     for (var timetable in timetableDataList) {
@@ -72,8 +73,14 @@ class NotificationService {
                   priority: Priority.high,
                 ),
               ),
-              uiLocalNotificationDateInterpretation:
-                  UILocalNotificationDateInterpretation.absoluteTime,
+            );
+
+            // Schedule a notification 5 seconds before class starts
+            await schedulePreNotification(
+              'Upcoming Class Reminder',
+              'Your class for ${timetable.course.courseTitle} starts soon!',
+              dateTimeFromTo.from!,
+              timetable.id.hashCode + i + 100, // Unique ID
             );
           }
         }
@@ -82,10 +89,44 @@ class NotificationService {
     log('Scheduled notifications for timetable');
   }
 
+  /// Schedule a notification 5 seconds before the given event time
+  static Future<void> schedulePreNotification(
+      String title, String body, DateTime eventTime, int id) async {
+    final tz.TZDateTime scheduledTime = tz.TZDateTime.from(eventTime, tz.local)
+        .subtract(const Duration(seconds: 5));
+
+    await _notificationsPlugin.zonedSchedule(
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      id,
+      title,
+      body,
+      scheduledTime,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'pre_notification_channel',
+          'Pre-event Notifications',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+      ),
+    );
+
+    log('Scheduled pre-notification for $title at $scheduledTime');
+  }
+
+  /// Schedule notifications when an assignment or timetable event is added
   static Future<void> scheduleNotificationsOnAdd(
       {AssignmentSchedule? assignment, List<TimeTableData>? timetable}) async {
     if (assignment != null) {
       await scheduleAssignmentNotification(assignment);
+
+      // Schedule a notification 5 seconds before assignment is due
+      await schedulePreNotification(
+        'Assignment Reminder',
+        '${assignment.courseId}: ${assignment.description} is due soon!',
+        assignment.assignmentDateTime,
+        assignment.assignmentId.hashCode + 200, // Unique ID
+      );
     }
     if (timetable != null) {
       await scheduleTimetableNotifications(timetable);

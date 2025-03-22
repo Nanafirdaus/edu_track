@@ -1,14 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/model/course.dart';
-import 'package:studybuddy/model/hive_boxes.dart';
-import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/model/course.dart';
+import 'package:studybuddy/provider/model/hive_boxes.dart';
+import 'package:studybuddy/provider/model/user.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
-import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/days_enum.dart';
 import 'package:studybuddy/utils/extension.dart';
 import 'package:studybuddy/utils/text_style.dart';
@@ -157,7 +154,7 @@ class _EditDetailsState extends State<EditDetails> {
                             selectedLevel = item!;
                           });
                         },
-                        icon: const Icon(Icons.arrow_drop_down),
+                        icon: const Icon(Iconsax.arrow_down_1_copy),
                       ),
                     ),
                   ),

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/model/user.dart';
 
 class UserDataDB {
   static UserDataDB? _instance;

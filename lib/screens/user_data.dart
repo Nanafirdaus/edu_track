@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:studybuddy/model/hive_boxes.dart';
+import 'package:studybuddy/provider/model/hive_boxes.dart';
 import 'package:studybuddy/screens/courses_screen.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/extension.dart';
+import 'package:studybuddy/utils/text_style.dart';
 import 'package:studybuddy/widgets/custom_textfield1.dart';
 
 class UserDataScreen extends StatefulWidget {
@@ -27,15 +28,19 @@ class _UserDataScreenState extends State<UserDataScreen> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Image.asset(
+              "assets/images/hat.png",
+              height: 250,
+            ),
             SizedBox(
               width: context.screenWidth,
-              height: context.screenHeight * 0.2,
-              child: const Center(
+              height: context.screenHeight * 0.045,
+              child: Center(
                 child: Text(
                   "Input your Details",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  style: kTextStyle(
+                    (35),
+                    isBold: true,
                   ),
                 ),
               ),

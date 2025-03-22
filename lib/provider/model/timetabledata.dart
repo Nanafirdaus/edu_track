@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:studybuddy/model/course.dart';
-import 'package:studybuddy/model/datetime_from_to.dart';
+import 'package:studybuddy/provider/model/course.dart';
+import 'package:studybuddy/provider/model/datetime_from_to.dart';
 import 'package:studybuddy/utils/days_enum.dart';
 
 part 'timetabledata.g.dart';

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/model/course.dart';
-import 'package:studybuddy/model/datetime_from_to.dart';
+import 'package:studybuddy/provider/model/course.dart';
+import 'package:studybuddy/provider/model/datetime_from_to.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/utils/days_enum.dart';
@@ -339,24 +339,14 @@ void dispose() {
                 BottomButtons(
                   current: currentIndex,
                   onNextTapped: () {
-                    log(textEditingCtrls![currentIndex]
+                    log("${textEditingCtrls![currentIndex]
                                 [0]
                             .text
-                            .isEmpty
-                            .toString() +
-                        " " +
-                        textEditingCtrls![currentIndex][1]
+                            .isEmpty} ${textEditingCtrls![currentIndex][1]
                             .text
-                            .isEmpty
-                            .toString() +
-                        " " +
-                        timeTableProvider.timetableDataList[currentIndex]
-                            .lecturerName.isEmpty
-                            .toString() +
-                        " " +
-                        timeTableProvider
-                            .timetableDataList[currentIndex].venue.isEmpty
-                            .toString());
+                            .isEmpty} ${timeTableProvider.timetableDataList[currentIndex]
+                            .lecturerName.isEmpty} ${timeTableProvider
+                            .timetableDataList[currentIndex].venue.isEmpty}");
 
                     if (textEditingCtrls![currentIndex][0].text.isEmpty ||
                         textEditingCtrls![currentIndex][1].text.isEmpty ||

@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studybuddy/bot_nav_bar.dart';
-import 'package:studybuddy/model/course.dart';
-import 'package:studybuddy/model/hive_boxes.dart';
-import 'package:studybuddy/model/user.dart';
+import 'package:studybuddy/provider/model/course.dart';
+import 'package:studybuddy/provider/model/hive_boxes.dart';
+import 'package:studybuddy/provider/model/user.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/extension.dart';
 import 'package:studybuddy/utils/text_style.dart';
@@ -136,6 +134,11 @@ class _CoursesScreenState extends State<CoursesScreen> {
         ),
         body: Column(
           children: [
+            Center(
+              child: Image.asset(
+                "assets/images/addnote.png",
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: courses.length,

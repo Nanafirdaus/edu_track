@@ -71,7 +71,7 @@ class CustomSegmentedButton extends StatelessWidget {
                   height: 40,
                   child: Center(
                     child: Text(
-                      "Assignments",
+                      "Tasks",
                       style: kTextStyle(12, isBold: true),
                     ),
                   ),
