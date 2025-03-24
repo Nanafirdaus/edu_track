@@ -20,7 +20,7 @@ class EmptyActivity extends StatelessWidget {
         if (!today!) ...{
           Text(
             "Nothing to show here\nCreate $text to get started",
-            style: kTextStyle(14),
+            style: kTextStyle(18),
             textAlign: TextAlign.center,
           ),
           FilledButton(

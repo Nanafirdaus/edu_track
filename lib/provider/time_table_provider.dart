@@ -54,8 +54,6 @@ class TempTimeTableProvider extends BaseTimetimeProvider {
     notifyListeners();
   }
 
-  
-
   @override
   void updateTimetableData(int index, TimeTableData data) {
     timetableDataList[index] = data;
@@ -158,8 +156,8 @@ class TimeTableProvider extends BaseTimetimeProvider {
     timetableDataList.add(data);
     notifyListeners();
   }
-  
-  void moveCourseToNewDay(TimeTableData course, Day oldDay, Day newDay) async{
+
+  void moveCourseToNewDay(TimeTableData course, Day oldDay, Day newDay) async {
     final courseIndex = timetableDataList.indexWhere((c) => c.id == course.id);
     if (courseIndex != -1) {
       final updatedCourse = timetableDataList[courseIndex];
@@ -169,7 +167,8 @@ class TimeTableProvider extends BaseTimetimeProvider {
       updatedDays.remove(oldDay);
       updatedDays.add(newDay);
 
-      timetableDataList[courseIndex] = updatedCourse.copyWith(days: updatedDays);
+      timetableDataList[courseIndex] =
+          updatedCourse.copyWith(days: updatedDays);
       await _timetableDB!.updateTimetableData(timetableDataList[courseIndex]);
       notifyListeners();
     }
@@ -182,10 +181,9 @@ class TimeTableProvider extends BaseTimetimeProvider {
   }
 
   void deleteTimetableData(String timetableId) {
-  timetableDataList.removeWhere((data) => data.id == timetableId);
-  notifyListeners(); 
-}
-
+    timetableDataList.removeWhere((data) => data.id == timetableId);
+    notifyListeners();
+  }
 
   @override
   void updateDays(Day day, int index) {
@@ -223,14 +221,19 @@ class TimeTableProvider extends BaseTimetimeProvider {
         timetableDataList.map(
             (timeTableData) => _timetableDB!.addToTimetableData(timeTableData)),
       );
-      Navigator.pop(context);
+
+      timetableDataList = _timetableDB!.timetableBox.values.toList();
+      timeTableCreated = true;
+      await NotificationService.scheduleTimetableNotifications(
+          timetableDataList);
+      notifyListeners();
+
+     if (context.mounted){
+       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Timetable created successfully")),
       );
-      timetableDataList = _timetableDB!.timetableBox.values.toList();
-      timeTableCreated = true;
-     await NotificationService.scheduleTimetableNotifications(timetableDataList);
-      notifyListeners();
+     }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Error creating timetable")),

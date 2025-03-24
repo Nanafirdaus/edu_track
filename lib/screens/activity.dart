@@ -78,14 +78,14 @@ class _ActivityScreenState extends State<ActivityScreen>
               isScrollable: false,
               tabs: const [
                 Tab(text: "Courses"),
-                Tab(text: "Assignments"),
+                Tab(text: "Tasks"),
               ],
             ),
             Expanded(
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  // Courses Tab 
+                  // Courses Tab
                   SingleChildScrollView(
                     child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -121,13 +121,16 @@ class _ActivityScreenState extends State<ActivityScreen>
                                           );
                                         },
                                         title: Text(
-                                            timetableData.course.courseTitle),
+                                          timetableData.course.courseTitle,
+                                          style: kTextStyle(18, isBold: true),
+                                        ),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(timetableData
-                                                .course.courseCode),
+                                            Text(
+                                              timetableData.course.courseCode,
+                                            ),
                                             Text(
                                                 "Lecturer: ${timetableData.lecturerName}"),
                                             Text(
@@ -209,7 +212,6 @@ class _ActivityScreenState extends State<ActivityScreen>
                                     child: ListTile(
                                       tileColor:
                                           Colors.greenAccent.withOpacity(0.05),
-                                          
                                       title: Text(
                                         course.courseTitle,
                                         style: kTextStyle(16),
@@ -259,7 +261,7 @@ class _ActivityScreenState extends State<ActivityScreen>
                         )),
                   ),
 
-                  // Assignments Tab 
+                  // Assignments Tab
                   ListView(
                     children:
                         context.watch<AssignmentProvider>().assignments.map(
