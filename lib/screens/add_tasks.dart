@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/provider/model/assignment_schedule.dart';
-import 'package:studybuddy/provider/model/user.dart';
+import 'package:studybuddy/model/assignment_schedule.dart';
+import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/provider/assignment_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/utils/extension.dart';
@@ -175,7 +175,11 @@ class _AddTaskScreenState extends State<AddTaskScreen>
                           context.read<AssignmentProvider>().addAssignment(
                                 AssignmentSchedule(
                                   isCompleted: false,
-                                  courseId: selectedCourse.toString(),
+                                  courseId: context
+                                      .read<UserDataProvider>()
+                                      .user!
+                                      .userCourses[selectedCourse]
+                                      .courseId,
                                   assignmentDateTime: dateTime!,
                                   assignmentId: DateTime.now()
                                       .microsecondsSinceEpoch

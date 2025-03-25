@@ -18,7 +18,7 @@ class BottomButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: current == 0
             ? MainAxisAlignment.end
@@ -26,7 +26,6 @@ class BottomButtons extends StatelessWidget {
         children: [
           if (current != 0)
             SizedBox(
-              width: MediaQuery.of(context).size.width * .25,
               height: 50,
               child: TextButton(
                 style: TextButton.styleFrom(
@@ -37,7 +36,7 @@ class BottomButtons extends StatelessWidget {
                 onPressed: onPrevTapped,
                 child: Text(
                   label1,
-                  style: kTextStyle(20, isBold: true, color: Colors.green),
+                  style: kTextStyle(18, isBold: true, color: Colors.green),
                 ),
               ),
             ),
@@ -52,7 +51,7 @@ class BottomButtons extends StatelessWidget {
               onPressed: onNextTapped,
               child: Text(
                 label2,
-                style: kTextStyle(20, isBold: true, color: Colors.white),
+                style: kTextStyle(18, isBold: true, color: Colors.white),
               ),
             ),
           )

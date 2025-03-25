@@ -15,32 +15,35 @@ class EmptyActivity extends StatelessWidget {
       children: [
         Image.asset(
           "assets/images/addnote.png",
-          height: 400,
+          height: 300,
         ),
         if (!today!) ...{
           Text(
-            "Nothing to show here\nCreate $text to get started",
+            text == "class"
+                ? "No classes today"
+                : "Nothing to show here\nCreate ${text.toLowerCase()} to get started",
             style: kTextStyle(18),
             textAlign: TextAlign.center,
           ),
-          FilledButton(
-            style: FilledButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+          if (text != "class")
+            FilledButton(
+              style: FilledButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (cotext) => TimetableCreationScreen()),
-              );
-            },
-            child: Text(
-              "Create $text",
-              style: kTextStyle(18),
-            ),
-          )
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (cotext) => TimetableCreationScreen()),
+                );
+              },
+              child: Text(
+                "Create $text",
+                style: kTextStyle(18),
+              ),
+            )
         } else ...{
           Text(
             "No $text today",

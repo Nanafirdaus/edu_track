@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:studybuddy/provider/model/course.dart';
-import 'package:studybuddy/provider/model/datetime_from_to.dart';
-import 'package:studybuddy/provider/model/hive_boxes.dart';
-import 'package:studybuddy/provider/model/timetabledata.dart';
+import 'package:studybuddy/model/course.dart';
+import 'package:studybuddy/model/datetime_from_to.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
+import 'package:studybuddy/model/timetabledata.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/services/notifications_service.dart';
 import 'package:studybuddy/services/timetable_db.dart';
@@ -33,7 +33,7 @@ class TempTimeTableProvider extends BaseTimetimeProvider {
 
   @override
   void initializeProvider(List<Course> courses) {
-    _timetableDB = TimetableDB(timetableBox: Hive.box(HiveBoxes.timetableBox));
+    _timetableDB = TimetableDB(box: Hive.box(HiveBoxes.timetableBox));
 
     timetableDataList = List.generate(courses.length, (index) {
       return TimeTableData(
@@ -109,12 +109,12 @@ class TimeTableProvider extends BaseTimetimeProvider {
   @override
   UserDataDB? _userDataDB;
   @override
-  bool? timeTableCreated;
+  bool? timeTableCreated = false;
   @override
   List<TimeTableData> timetableDataList = [];
 
   TimeTableProvider() {
-    _timetableDB = TimetableDB(timetableBox: Hive.box(HiveBoxes.timetableBox));
+    _timetableDB = TimetableDB(box: Hive.box(HiveBoxes.timetableBox));
     _userDataDB = UserDataDB(userBox: Hive.box(HiveBoxes.userBox));
     timeTableCreated = _timetableDB!.timetableBox.isNotEmpty;
     timetableDataList = timeTableCreated!
@@ -134,8 +134,13 @@ class TimeTableProvider extends BaseTimetimeProvider {
     notifyListeners();
   }
 
+  void refreshTimetable() {
+    timetableDataList = _timetableDB!.timetableBox.values.toList();
+    notifyListeners();
+  }
+
   void invalidateProvider() {
-    _timetableDB = TimetableDB(timetableBox: Hive.box(HiveBoxes.timetableBox));
+    _timetableDB = TimetableDB(box: Hive.box(HiveBoxes.timetableBox));
     timetableDataList = timeTableCreated!
         ? _timetableDB!.timetableBox.values.toList()
         : List.generate(_userDataDB!.userBox!.values.first.userCourses.length,
@@ -224,22 +229,29 @@ class TimeTableProvider extends BaseTimetimeProvider {
 
       timetableDataList = _timetableDB!.timetableBox.values.toList();
       timeTableCreated = true;
+      notifyListeners();
       await NotificationService.scheduleTimetableNotifications(
           timetableDataList);
-      notifyListeners();
 
-     if (context.mounted){
-       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Timetable created successfully")),
-      );
-     }
+      if (context.mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Timetable created successfully")),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Error creating timetable")),
       );
       log(e.toString());
     }
+  }
+
+  void deleteTimetable() async {
+    await _timetableDB!.deleteAllTimetableData();
+    timetableDataList = [];
+    timeTableCreated = false;
+    notifyListeners();
   }
 
   @override

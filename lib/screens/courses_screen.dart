@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studybuddy/bot_nav_bar.dart';
-import 'package:studybuddy/provider/model/course.dart';
-import 'package:studybuddy/provider/model/hive_boxes.dart';
-import 'package:studybuddy/provider/model/user.dart';
+import 'package:studybuddy/model/course.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
+import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/extension.dart';
 import 'package:studybuddy/utils/text_style.dart';
@@ -53,31 +53,28 @@ class _CoursesScreenState extends State<CoursesScreen> {
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text("Add Courses"),
-                          content: SizedBox(
-                            height: 120,
-                            width: context.screenWidth * .85,
-                            child: Column(
-                              children: [
-                                TextFieldWidget2(
-                                  textCapitalization: TextCapitalization.words,
-                                  textEditingController: titleController,
-                                  label: "Course Title",
-                                  hintText: "E.g Math",
-                                  prefixIcon: const Icon(Icons.book),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                TextFieldWidget2(
-                                  textCapitalization:
-                                      TextCapitalization.characters,
-                                  textEditingController: codeController,
-                                  label: "Course Code",
-                                  hintText: "E.g ABC1203",
-                                  prefixIcon: const Icon(Icons.code),
-                                ),
-                              ],
-                            ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFieldWidget2(
+                                textCapitalization: TextCapitalization.words,
+                                textEditingController: titleController,
+                                label: "Course Title",
+                                hintText: "E.g Math",
+                                prefixIcon: const Icon(Icons.book),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TextFieldWidget2(
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textEditingController: codeController,
+                                label: "Course Code",
+                                hintText: "E.g ABC1203",
+                                prefixIcon: const Icon(Icons.code),
+                              ),
+                            ],
                           ),
                           actions: [
                             TextButton(

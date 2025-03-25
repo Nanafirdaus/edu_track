@@ -74,8 +74,7 @@ class CoursesDisplayScreen extends StatelessWidget {
                                   value: d,
                                   child: Text(d.name[0].toUpperCase() +
                                       d.name.substring(1)),
-                                ))
-                            ,
+                                )),
                       ],
                       icon: const Icon(Icons.more_vert),
                     ),

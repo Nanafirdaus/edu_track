@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/provider/model/course.dart';
-import 'package:studybuddy/provider/model/hive_boxes.dart';
-import 'package:studybuddy/provider/model/user.dart';
+import 'package:studybuddy/model/course.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
+import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/utils/days_enum.dart';
 import 'package:studybuddy/utils/extension.dart';
@@ -46,7 +46,51 @@ class _EditDetailsState extends State<EditDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OutlinedButton(
+              onPressed: () {
+                if (nameCtrl.text.trim() !=
+                    context.read<UserDataProvider>().user!.userName) {
+                  context
+                      .read<UserDataProvider>()
+                      .updateName(nameCtrl.text.trim());
+                }
+                if (deptCtrl.text.trim() !=
+                    context.read<UserDataProvider>().user!.userDepartment) {
+                  context
+                      .read<UserDataProvider>()
+                      .updateDept(deptCtrl.text.trim());
+                }
+                if (selectedLevel !=
+                    context.read<UserDataProvider>().user!.userLevel) {
+                  context.read<UserDataProvider>().updateLevel(selectedLevel!);
+                }
+
+                context.read<UserDataProvider>().updateCourses(courses);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Saved",
+                      style: kTextStyle(15),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.all(4),
+                    duration: const Duration(milliseconds: 700),
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Save",
+                style: kTextStyle(15),
+              ),
+            ),
+          )
+        ],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,54 +368,6 @@ class _EditDetailsState extends State<EditDetails> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: context.screenWidth,
-              height: 50,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(23),
-                  ),
-                ),
-                onPressed: () {
-                  if (nameCtrl.text.trim() !=
-                      context.read<UserDataProvider>().user!.userName) {
-                    context
-                        .read<UserDataProvider>()
-                        .updateName(nameCtrl.text.trim());
-                  }
-                  if (deptCtrl.text.trim() !=
-                      context.read<UserDataProvider>().user!.userDepartment) {
-                    context
-                        .read<UserDataProvider>()
-                        .updateDept(deptCtrl.text.trim());
-                  }
-                  if (selectedLevel !=
-                      context.read<UserDataProvider>().user!.userLevel) {
-                    context
-                        .read<UserDataProvider>()
-                        .updateLevel(selectedLevel!);
-                  }
-
-                  context.read<UserDataProvider>().updateCourses(courses);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "Saved",
-                        style: kTextStyle(15),
-                      ),
-                      behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.all(4),
-                      duration: const Duration(milliseconds: 700),
-                    ),
-                  );
-                },
-                child: Text("Save"),
-              ),
-            ),
-          )
         ],
       ),
     );

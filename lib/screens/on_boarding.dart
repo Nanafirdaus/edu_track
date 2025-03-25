@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:studybuddy/provider/model/onboarding_items.dart';
+import 'package:studybuddy/model/onboarding_items.dart';
 import 'package:studybuddy/utils/extension.dart';
 import 'package:studybuddy/widgets/get_started_btn.dart';
 

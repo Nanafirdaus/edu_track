@@ -15,11 +15,11 @@ class EmptyActivity2 extends StatelessWidget {
       children: [
         Image.asset(
           "assets/images/addnote.png",
-          height: 400,
+          height: 300,
         ),
         if (!today!) ...{
           Text(
-            "Nothing to show here\nCreate $text to get started",
+            "Nothing to show here\nCreate ${text.toLowerCase()} to get started",
             style: kTextStyle(18),
             textAlign: TextAlign.center,
           ),

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/bot_nav_bar.dart';
-import 'package:studybuddy/provider/model/datetime_from_to.dart';
-import 'package:studybuddy/provider/model/hive_boxes.dart';
-import 'package:studybuddy/provider/model/assignment_schedule.dart';
-import 'package:studybuddy/provider/model/course.dart';
-import 'package:studybuddy/provider/model/course_schedule.dart';
-import 'package:studybuddy/provider/model/timetabledata.dart';
-import 'package:studybuddy/provider/model/user.dart';
+import 'package:studybuddy/model/datetime_from_to.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
+import 'package:studybuddy/model/assignment_schedule.dart';
+import 'package:studybuddy/model/course.dart';
+import 'package:studybuddy/model/course_schedule.dart';
+import 'package:studybuddy/model/timetabledata.dart';
+import 'package:studybuddy/model/user.dart';
 import 'package:studybuddy/provider/assignment_provider.dart';
 import 'package:studybuddy/provider/segmented_btn_provider.dart';
+import 'package:studybuddy/provider/tab_provider.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/screens/on_boarding.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AssignmentProvider()),
         ChangeNotifierProvider(create: (_) => TimeTableProvider()),
         ChangeNotifierProvider(create: (_) => TempTimeTableProvider()),
+        ChangeNotifierProvider(create: (_) => TabProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
