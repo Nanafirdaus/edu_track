@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:studybuddy/provider/model/assignment_schedule.dart';
+import 'package:studybuddy/model/assignment_schedule.dart';
 
 class AssignmentDB {
   Box<AssignmentSchedule> assignmentBox;

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/provider/model/course.dart';
-import 'package:studybuddy/provider/model/datetime_from_to.dart';
+import 'package:studybuddy/model/course.dart';
+import 'package:studybuddy/model/datetime_from_to.dart';
 import 'package:studybuddy/provider/time_table_provider.dart';
 import 'package:studybuddy/provider/user_data_provider.dart';
 import 'package:studybuddy/utils/days_enum.dart';
@@ -54,17 +54,17 @@ class _TimetableCreationScreenState extends State<TimetableCreationScreen> {
   }
 
   @override
-void dispose() {
-  pageController.dispose();
-  if (textEditingCtrls != null) {
-    for (var controllers in textEditingCtrls!) {
-      for (var ctrl in controllers) {
-        ctrl.dispose();
+  void dispose() {
+    pageController.dispose();
+    if (textEditingCtrls != null) {
+      for (var controllers in textEditingCtrls!) {
+        for (var ctrl in controllers) {
+          ctrl.dispose();
+        }
       }
     }
+    super.dispose();
   }
-  super.dispose();
-}
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +109,10 @@ void dispose() {
                         width: MediaQuery.of(context).size.width * .90,
                         child: Center(
                           child: Text(
-                            userDataProvider
-                                .user!.userCourses[currentIndex].courseTitle,
+                            widget.courses == null
+                                ? userDataProvider
+                                    .user!.userCourses[currentIndex].courseTitle
+                                : widget.courses![currentIndex].courseTitle,
                             style: kTextStyle(35, isBold: true),
                           ),
                         ),
@@ -339,17 +341,12 @@ void dispose() {
                 BottomButtons(
                   current: currentIndex,
                   onNextTapped: () {
-                    log("${textEditingCtrls![currentIndex]
-                                [0]
-                            .text
-                            .isEmpty} ${textEditingCtrls![currentIndex][1]
-                            .text
-                            .isEmpty} ${timeTableProvider.timetableDataList[currentIndex]
-                            .lecturerName.isEmpty} ${timeTableProvider
-                            .timetableDataList[currentIndex].venue.isEmpty}");
+                    log("${textEditingCtrls![currentIndex][0].text.isEmpty} ${textEditingCtrls![currentIndex][1].text.isEmpty} ${timeTableProvider.timetableDataList[currentIndex].lecturerName.isEmpty} ${timeTableProvider.timetableDataList[currentIndex].venue.isEmpty}");
 
                     if (textEditingCtrls![currentIndex][0].text.isEmpty ||
                         textEditingCtrls![currentIndex][1].text.isEmpty ||
+                        timeTableProvider
+                            .timetableDataList[currentIndex].days.isEmpty ||
                         timeTableProvider
                             .timetableDataList[currentIndex].dateTimeFromTo
                             .where((item) => item.isNull())
@@ -379,6 +376,7 @@ void dispose() {
                                         .text
                                         .trim()));
                         timeTableProvider.createTimetable(context);
+                        context.read<TimeTableProvider>().refreshTimetable();
                         log(timeTableProvider.timetableDataList.toString());
                         return;
                       }

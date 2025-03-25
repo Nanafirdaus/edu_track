@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:studybuddy/provider/model/hive_boxes.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/screens/courses_screen.dart';
 import 'package:studybuddy/services/hive_db.dart';
 import 'package:studybuddy/utils/extension.dart';
@@ -25,181 +25,183 @@ class _UserDataScreenState extends State<UserDataScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset(
-              "assets/images/hat.png",
-              height: 250,
-            ),
-            SizedBox(
-              width: context.screenWidth,
-              height: context.screenHeight * 0.045,
-              child: Center(
-                child: Text(
-                  "Input your Details",
-                  style: kTextStyle(
-                    (35),
-                    isBold: true,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                "assets/images/hat.png",
+                height: 250,
+              ),
+              SizedBox(
+                width: context.screenWidth,
+                height: context.screenHeight * 0.045,
+                child: Center(
+                  child: Text(
+                    "Input your Details",
+                    style: kTextStyle(
+                      (35),
+                      isBold: true,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 45,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  TextFieldWidget(
-                    formFieldValidator: (value) {
-                      value.toString().isEmpty
-                          ? "Please enter your name"
-                          : null;
-                      return null;
-                    },
-                    textEditingController: nameController,
-                    prefixIcon: const Icon(
-                      Icons.person,
-                      size: 18,
+              const SizedBox(
+                height: 45,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    TextFieldWidget(
+                      formFieldValidator: (value) {
+                        value.toString().isEmpty
+                            ? "Please enter your name"
+                            : null;
+                        return null;
+                      },
+                      textEditingController: nameController,
+                      prefixIcon: const Icon(
+                        Icons.person,
+                        size: 18,
+                      ),
+                      hintText: "Enter John Doe",
+                      label: "Name",
                     ),
-                    hintText: "Enter John Doe",
-                    label: "Name",
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  TextFieldWidget(
-                    formFieldValidator: (value) {
-                      value.toString().isEmpty
-                          ? "Please enter your department"
-                          : null;
-                      return null;
-                    },
-                    textEditingController: deptController,
-                    prefixIcon: const Icon(
-                      Icons.place_rounded,
-                      size: 18,
+                    const SizedBox(
+                      height: 30,
                     ),
-                    hintText: "E.g Information Technology",
-                    label: "Department",
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  SizedBox(
-                    width: context.screenWidth,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(
-                              15,
+                    TextFieldWidget(
+                      formFieldValidator: (value) {
+                        value.toString().isEmpty
+                            ? "Please enter your department"
+                            : null;
+                        return null;
+                      },
+                      textEditingController: deptController,
+                      prefixIcon: const Icon(
+                        Icons.place_rounded,
+                        size: 18,
+                      ),
+                      hintText: "E.g Information Technology",
+                      label: "Department",
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    SizedBox(
+                      width: context.screenWidth,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(
+                                15,
+                              ),
                             ),
-                          ),
-                          border: Border.all()),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          isExpanded: true,
-                          hint: const Row(
-                            children: [
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Icon(
-                                Icons.school,
-                                size: 18,
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Text("Select level"),
-                            ],
-                          ),
-                          value: selectedLevel,
-                          items: levels.map((int item) {
-                            return DropdownMenuItem(
-                              value: item,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.school,
-                                      size: 18,
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Text("Level $item"),
-                                  ],
+                            border: Border.all()),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            isExpanded: true,
+                            hint: const Row(
+                              children: [
+                                SizedBox(
+                                  width: 15,
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (item) {
-                            setState(() {
-                              selectedLevel = item!;
-                            });
-                          },
-                          icon: const Icon(Icons.arrow_drop_down),
+                                Icon(
+                                  Icons.school,
+                                  size: 18,
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Text("Select level"),
+                              ],
+                            ),
+                            value: selectedLevel,
+                            items: levels.map((int item) {
+                              return DropdownMenuItem(
+                                value: item,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.school,
+                                        size: 18,
+                                      ),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text("Level $item"),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (item) {
+                              setState(() {
+                                selectedLevel = item!;
+                              });
+                            },
+                            icon: const Icon(Icons.arrow_drop_down),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  ListenableBuilder(
-                      listenable: Listenable.merge(
-                        [
-                          nameController,
-                          deptController,
-                        ],
-                      ),
-                      builder: (context, _) {
-                        bool? isEnabled = nameController.text.isNotEmpty &&
-                            deptController.text.isNotEmpty &&
-                            selectedLevel != null;
-                        return SizedBox(
-                          width: context.screenWidth,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (isEnabled) {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return CoursesScreen(
-                                    name: nameController.text.trim(),
-                                    dept: deptController.text.trim(),
-                                    level: selectedLevel!,
-                                  );
-                                }));
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    ListenableBuilder(
+                        listenable: Listenable.merge(
+                          [
+                            nameController,
+                            deptController,
+                          ],
+                        ),
+                        builder: (context, _) {
+                          bool? isEnabled = nameController.text.isNotEmpty &&
+                              deptController.text.isNotEmpty &&
+                              selectedLevel != null;
+                          return SizedBox(
+                            width: context.screenWidth,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (isEnabled) {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return CoursesScreen(
+                                      name: nameController.text.trim(),
+                                      dept: deptController.text.trim(),
+                                      level: selectedLevel!,
+                                    );
+                                  }));
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                backgroundColor: isEnabled
+                                    ? const Color(0xff497255)
+                                    : Colors.grey,
                               ),
-                              backgroundColor: isEnabled
-                                  ? const Color(0xff497255)
-                                  : Colors.grey,
-                            ),
-                            child: const Text(
-                              "Continue",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                              child: const Text(
+                                "Continue",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                ],
+                          );
+                        }),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

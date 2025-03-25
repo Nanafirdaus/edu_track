@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:studybuddy/provider/model/assignment_schedule.dart';
-import 'package:studybuddy/provider/model/timetabledata.dart';
+import 'package:studybuddy/model/assignment_schedule.dart';
+import 'package:studybuddy/model/timetabledata.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
 
@@ -131,5 +131,11 @@ class NotificationService {
     if (timetable != null) {
       await scheduleTimetableNotifications(timetable);
     }
+  }
+
+  /// Cancel a scheduled notification
+  static Future<void> cancelNotification(int id) async {
+    await _notificationsPlugin.cancel(id);
+    log('Cancelled notification with ID: $id');
   }
 }

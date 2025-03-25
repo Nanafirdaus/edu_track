@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:studybuddy/provider/model/assignment_schedule.dart';
-import 'package:studybuddy/provider/model/hive_boxes.dart';
+import 'package:studybuddy/model/assignment_schedule.dart';
+import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/services/assignment.dart';
 import 'package:studybuddy/services/notifications_service.dart';
 

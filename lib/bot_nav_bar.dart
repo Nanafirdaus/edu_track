@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:studybuddy/provider/tab_provider.dart';
 import 'package:studybuddy/screens/activity.dart';
 import 'package:studybuddy/screens/add_tasks.dart';
 import 'package:studybuddy/screens/home.dart';
@@ -28,21 +30,23 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
         children: screens,
       ),
       floatingActionButton: currentIndex == 1
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddTaskScreen(),
+          ? !context.watch<TabProvider>().isClassTab
+              ? FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddTaskScreen(),
+                      ),
+                    );
+                  },
+                  elevation: 2,
+                  child: const Icon(
+                    Iconsax.add_copy,
+                    size: 30,
                   ),
-                );
-              },
-              elevation: 2,
-              child: const Icon(
-                Iconsax.add_copy,
-                size: 30,
-              ),
-            )
+                )
+              : null
           : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
