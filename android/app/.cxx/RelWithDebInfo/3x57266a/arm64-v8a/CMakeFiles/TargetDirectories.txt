@@ -1,0 +1,2 @@
+C:/Users/Nana/OneDrive/Documents/edu_track/android/app/.cxx/RelWithDebInfo/3x57266a/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Nana/OneDrive/Documents/edu_track/android/app/.cxx/RelWithDebInfo/3x57266a/arm64-v8a/CMakeFiles/rebuild_cache.dir

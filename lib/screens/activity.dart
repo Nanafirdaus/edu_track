@@ -4,7 +4,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/model/course.dart';
 import 'package:studybuddy/model/hive_boxes.dart';
 import 'package:studybuddy/model/timetabledata.dart';
 import 'package:studybuddy/model/user.dart';
@@ -147,33 +146,48 @@ class _ActivityScreenState extends State<ActivityScreen>
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   if (timetable.isNotEmpty) ...{
-                                    ...Day.values.map((e) => Card(
-                                          elevation: 3,
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 10),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12)),
-                                          child: ListTile(
-                                            tileColor: Colors.greenAccent
-                                                .withOpacity(0.05),
-                                            title: Text(
-                                                e.name[0].toUpperCase() +
-                                                    e.name.substring(1)),
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return CoursesDisplayScreen(
-                                                      day: e,
-                                                    );
-                                                  },
-                                                ),
-                                              );
-                                            },
+                                    ...timeTableProvider.timetableDataList.map(
+                                      (timetableData) => Card(
+                                        elevation: 3,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8, horizontal: 10),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        child: ListTile(
+                                          tileColor: Colors.greenAccent
+                                              .withOpacity(0.05),
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CoursesDisplayScreen(
+                                                        day: timetableData
+                                                                .days.isNotEmpty
+                                                            ? timetableData
+                                                                .days.first
+                                                            : Day.monday),
+                                              ),
+                                            );
+                                          },
+                                          title: Text(
+                                              timetableData.course.courseTitle),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(timetableData
+                                                  .course.courseCode),
+                                              Text(
+                                                  "Lecturer: ${timetableData.lecturerName}"),
+                                              Text(
+                                                  "Venue: ${timetableData.venue}"),
+                                            ],
                                           ),
-                                        ))
+                                        ),
+                                      ),
+                                    ),
                                   } else ...{
                                     ...context
                                         .read<UserDataProvider>()
@@ -342,100 +356,115 @@ class _ActivityScreenState extends State<ActivityScreen>
                                 ],
                               )),
                         ),
-
-                        // Assignments Tab
-                        ListView(
-                          children: context
-                              .watch<AssignmentProvider>()
-                              .assignments
-                              .map(
-                            (assignment) {
-                              return Card(
-                                elevation: 3,
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 10),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: InkWell(
-                                        child: CheckboxListTile(
-                                          tileColor: Colors.greenAccent
-                                              .withOpacity(0.05),
-                                          value: assignment.isCompleted,
-                                          onChanged: (val) {
-                                            assignmentProvider
-                                                .toggleCompletedStatus(
-                                                    assignment.assignmentId,
-                                                    val!);
-                                          },
-                                          title: Text(
-                                            assignment.description,
-                                            style: kTextStyle(18, isBold: true),
-                                          ),
-                                          subtitle: Text(
-                                            "${user!.userCourses.firstWhere((course) => course.courseId == assignment.courseId).courseTitle} - ${assignment.assignmentDateTime.formatDateTime} ${assignment.assignmentDateTime.format(
-                                              DateFormat.HOUR_MINUTE,
-                                            )}",
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: Text(
-                                                "Delete assignment",
-                                                style: kTextStyle(20,
-                                                    isBold: true),
-                                              ),
-                                              content: SizedBox(
-                                                width:
-                                                    context.screenWidth * .70,
-                                                child: Text(
-                                                  "Do you want to delete this assignment",
-                                                  style: kTextStyle(18),
-                                                ),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<
-                                                            AssignmentProvider>()
-                                                        .deleteAssignment(
-                                                            assignment
-                                                                .assignmentId);
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text("Yes",
-                                                      style: kTextStyle(16)),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text("No",
-                                                      style: kTextStyle(16)),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                      icon: const Icon(Iconsax.trash,
-                                          color: Colors.red),
-                                    ),
-                                  ],
+                        context.watch<AssignmentProvider>().assignments.isEmpty
+                            ? Center(
+                                child: Image.asset(
+                                  "assets/images/addnote.png",
+                                  height: 400,
                                 ),
-                              );
-                            },
-                          ).toList(),
-                        ),
+                              )
+                            :
+                            // Assignments Tab
+                            ListView(
+                                children: context
+                                    .watch<AssignmentProvider>()
+                                    .assignments
+                                    .map(
+                                  (assignment) {
+                                    return Card(
+                                      elevation: 3,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 10),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
+                                              child: CheckboxListTile(
+                                                tileColor: Colors.greenAccent
+                                                    .withOpacity(0.05),
+                                                value: assignment.isCompleted,
+                                                onChanged: (val) {
+                                                  assignmentProvider
+                                                      .toggleCompletedStatus(
+                                                          assignment
+                                                              .assignmentId,
+                                                          val!);
+                                                },
+                                                title: Text(
+                                                  assignment.description,
+                                                  style: kTextStyle(18,
+                                                      isBold: true),
+                                                ),
+                                                subtitle: Text(
+                                                  "${user!.userCourses.firstWhere((course) => course.courseId == assignment.courseId).courseTitle} - ${assignment.assignmentDateTime.formatDateTime} ${assignment.assignmentDateTime.format(
+                                                    DateFormat.HOUR_MINUTE,
+                                                  )}",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      "Delete assignment",
+                                                      style: kTextStyle(20,
+                                                          isBold: true),
+                                                    ),
+                                                    content: SizedBox(
+                                                      width:
+                                                          context.screenWidth *
+                                                              .70,
+                                                      child: Text(
+                                                        "Do you want to delete this assignment",
+                                                        style: kTextStyle(18),
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          context
+                                                              .read<
+                                                                  AssignmentProvider>()
+                                                              .deleteAssignment(
+                                                                  assignment
+                                                                      .assignmentId);
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text("Yes",
+                                                            style:
+                                                                kTextStyle(16)),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text("No",
+                                                            style:
+                                                                kTextStyle(16)),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            icon: const Icon(Iconsax.trash,
+                                                color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
                       ],
                     ),
                   ),

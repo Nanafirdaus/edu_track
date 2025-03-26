@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         title: Text(
           "Profile",
-          style: kTextStyle(25),
+          style: kTextStyle(25, isBold: true),
         ),
         actions: [
           IconButton(
